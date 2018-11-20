@@ -1,8 +1,10 @@
 # hw08-Caroline-Seip
 hw08-Caroline-Seip created by GitHub Classroom
 
-Check out my app here: https://carolineseip.shinyapps.io/hw08/
+# This repository holds Caroline Seip's hw08 assignment for UBC STAT547M
 
-The original code was accessed from:
+Check out my app online here: https://carolineseip.shinyapps.io/hw08/
 
-The data for this app is available in:
+The code for my app can be accessed here: https://github.com/STAT545-UBC-students/hw08-Caroline-Seip/blob/master/app.R
+
+The data for this app is available here: https://github.com/STAT545-UBC-students/hw08-Caroline-Seip/blob/master/bcl-data.csv
