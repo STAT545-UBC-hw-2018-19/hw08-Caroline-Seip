@@ -1,7 +1,9 @@
 # hw08-Caroline-Seip
 hw08-Caroline-Seip created by GitHub Classroom
 
-# This repository holds Caroline Seip's hw08 assignment for UBC STAT547M
+This repository holds Caroline Seip's hw08 assignment for UBC STAT547M
+
+## Relevant links
 
 Check out my app online here: https://carolineseip.shinyapps.io/hw08/
 
