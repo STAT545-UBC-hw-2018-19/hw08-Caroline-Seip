@@ -1,14 +1,20 @@
-library(shiny)
+#Load required packages
+library(shiny) 
 library(ggplot2)
 library(dplyr)
+library(shinythemes)
 
+#Input data file
 bcl <- read.csv("bcl-data.csv", stringsAsFactors = FALSE)
 
-ui <- fluidPage(
+#Create user interface
+ui <- fluidPage( theme = shinytheme("yeti"),
   titlePanel("BC Liquor Store prices"),
   sidebarLayout(
     sidebarPanel(
+      #Add slider bar for selecting price
       sliderInput("priceInput", "Price", 0, 100, c(25, 40), pre = "$"),
+      #Add radio buttons for selecting product type
       radioButtons("typeInput", "Product type",
                    choices = c("BEER", "REFRESHMENT", "SPIRITS", "WINE"),
                    selected = "WINE"),
@@ -16,9 +22,12 @@ ui <- fluidPage(
       uiOutput("countryOutput")
     ),
     mainPanel(
+      #Plot results
       plotOutput("coolplot"),
       br(), br(),
-      tableOutput("results"),
+      #Add interactive table of results
+      DT::dataTableOutput("results"),
+      #Add BCL image at bottom of page
       img(src = "bcl_image.png")
     )
   )
@@ -52,7 +61,7 @@ server <- function(input, output) {
       geom_histogram()
   })
   
-  output$results <- renderTable({
+  output$results <- DT::renderDataTable({
     filtered()
   })
 }
