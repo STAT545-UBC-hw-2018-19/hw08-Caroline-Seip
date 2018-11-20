@@ -1,48 +1,58 @@
 library(shiny)
-library(tidyverse)
+library(ggplot2)
 library(dplyr)
-
-# Define UI for application that draws a histogram
 
 bcl <- read.csv("bcl-data.csv", stringsAsFactors = FALSE)
 
 ui <- fluidPage(
-  titlePanel("BC Liquor price app", 
-             windowTitle = "BCL app"),
+  titlePanel("BC Liquor Store prices"),
   sidebarLayout(
     sidebarPanel(
-      sliderInput("priceInput", "Select your desired price range.",
-                  min = 0, max = 100, value = c(15, 30), pre="$"),
-      radioButtons("typeInput", "Select your drank",
-                   choices = c("BEER", "REFRESHMENT", "SPIRITS", "WINE"))
-                       ),
-                       mainPanel(
-                         plotOutput("price_hist"),
-                       tableOutput("bcl_data")
-                     )
+      sliderInput("priceInput", "Price", 0, 100, c(25, 40), pre = "$"),
+      radioButtons("typeInput", "Product type",
+                   choices = c("BEER", "REFRESHMENT", "SPIRITS", "WINE"),
+                   selected = "WINE"),
+      uiOutput("countryOutput")
+    ),
+    mainPanel(
+      plotOutput("coolplot"),
+      br(), br(),
+      tableOutput("results")
+    )
+  )
 )
-)
-  
-# Define server logic required to draw a histogram
+
 server <- function(input, output) {
-  observe(print(input$priceInput))
-  bcl_filtered <- reactive({
-    bcl %>% 
-    filter(Price < input$priceInput[2],
-           Price > input$priceInput[1],
-           Type == input$typeInput)
+  output$countryOutput <- renderUI({
+    selectInput("countryInput", "Country",
+                sort(unique(bcl$Country)),
+                selected = "CANADA")
+  })  
+  
+  filtered <- reactive({
+    if (is.null(input$countryInput)) {
+      return(NULL)
+    }    
+    
+    bcl %>%
+      filter(Price >= input$priceInput[1],
+             Price <= input$priceInput[2],
+             Type == input$typeInput,
+             Country == input$countryInput
+      )
   })
-   output$price_hist <- renderPlot({
-     bcl_filtered() %>% 
-     ggplot(aes(Price)) +
-     geom_histogram()
-   })
-   output$bcl_data <- renderTable({ 
-                                bcl_filtered()
-})
-   
+  
+  output$coolplot <- renderPlot({
+    if (is.null(filtered())) {
+      return()
+    }
+    ggplot(filtered(), aes(Alcohol_Content)) +
+      geom_histogram()
+  })
+  
+  output$results <- renderTable({
+    filtered()
+  })
 }
 
-# Run the application 
 shinyApp(ui = ui, server = server)
-
