@@ -12,12 +12,14 @@ ui <- fluidPage(
       radioButtons("typeInput", "Product type",
                    choices = c("BEER", "REFRESHMENT", "SPIRITS", "WINE"),
                    selected = "WINE"),
+      
       uiOutput("countryOutput")
     ),
     mainPanel(
       plotOutput("coolplot"),
       br(), br(),
-      tableOutput("results")
+      tableOutput("results"),
+      img(src = "bcl_image.png")
     )
   )
 )
