@@ -12,6 +12,8 @@ For this assignment I added 3 features to the existing BC Liquor Store app
 
 ## Relevant links
 
+Instructions for this assignment are here: http://stat545.com/Classroom/assignments/hw08/hw08.html
+
 Check out my app online here: https://carolineseip.shinyapps.io/hw08/
 
 The code for my app can be accessed here: https://github.com/STAT545-UBC-students/hw08-Caroline-Seip/blob/master/app.R
