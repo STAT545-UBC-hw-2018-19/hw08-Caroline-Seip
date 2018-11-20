@@ -1,16 +1,19 @@
-#Load required packages
+#Load required packages, use install.packages() first if not installed already
 library(shiny) 
 library(ggplot2)
 library(dplyr)
 library(shinythemes)
+library(DT)
+library(rsconnect)
 
 #Input data file
 bcl <- read.csv("bcl-data.csv", stringsAsFactors = FALSE)
 
-#Create user interface
-ui <- fluidPage( theme = shinytheme("yeti"),
-  titlePanel("BC Liquor Store prices"),
-  sidebarLayout(
+#Create user interface for app that draws a histogram and interactive data table
+ui <- fluidPage( #fluid means it will adapt to the screen you are using
+  theme = shinytheme("yeti"), #choose a theme for the app
+  titlePanel("BC Liquor Store prices"), #edit the title
+  sidebarLayout( #edit the sidebar
     sidebarPanel(
       #Add slider bar for selecting price
       sliderInput("priceInput", "Price", 0, 100, c(25, 40), pre = "$"),
@@ -20,11 +23,12 @@ ui <- fluidPage( theme = shinytheme("yeti"),
                    selected = "WINE"),
       
       uiOutput("countryOutput")
+      #specify output
     ),
-    mainPanel(
+    mainPanel( #edit main panel
       #Plot results
       plotOutput("coolplot"),
-      br(), br(),
+      br(), br(), #line break
       #Add interactive table of results
       DT::dataTableOutput("results"),
       #Add BCL image at bottom of page
@@ -33,6 +37,7 @@ ui <- fluidPage( theme = shinytheme("yeti"),
   )
 )
 
+#Define the server logic to create outputs
 server <- function(input, output) {
   output$countryOutput <- renderUI({
     selectInput("countryInput", "Country",
@@ -45,6 +50,7 @@ server <- function(input, output) {
       return(NULL)
     }    
     
+    #Build histogram
     bcl %>%
       filter(Price >= input$priceInput[1],
              Price <= input$priceInput[2],
@@ -61,6 +67,7 @@ server <- function(input, output) {
       geom_histogram()
   })
   
+  #Build interactive data table
   output$results <- DT::renderDataTable({
     filtered()
   })
