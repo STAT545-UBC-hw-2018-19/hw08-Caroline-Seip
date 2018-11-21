@@ -10,7 +10,7 @@ library(rsconnect)
 bcl <- read.csv("bcl-data.csv", stringsAsFactors = FALSE)
 
 #Create user interface for app that draws a histogram and interactive data table
-ui <- fluidPage( #fluid means it will adapt to the screen you are using
+ui <- fluidPage( #fluid will adapt to screen size
   theme = shinytheme("yeti"), #choose a theme for the app
   titlePanel("BC Liquor Store prices"), #edit the title
   sidebarLayout( #edit the sidebar
@@ -22,8 +22,7 @@ ui <- fluidPage( #fluid means it will adapt to the screen you are using
                    choices = c("BEER", "REFRESHMENT", "SPIRITS", "WINE"),
                    selected = "WINE"),
       
-      uiOutput("countryOutput")
-      #specify output
+      uiOutput("countryOutput") #specify output
     ),
     mainPanel( #edit main panel
       #Plot results
@@ -73,4 +72,5 @@ server <- function(input, output) {
   })
 }
 
+#Run app
 shinyApp(ui = ui, server = server)
